@@ -1,68 +1,56 @@
-# Trabalho-N2
+// Nome completo: Eduardo Minosso
+// Trabalho N2 - Simulação de Vendas em uma Loja
+// Professor: Alessandro João Brassanini
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#define PRODUTOS 200
-#define CLIENTES 50
+#define MAX_PRODUTOS 200
+#define MAX_CLIENTES 50
 
-// Gera número aleatório de 0 a n-1
-int random(int n) {
-    return rand() % n;
-}
+int main() {
+    float produtos[MAX_PRODUTOS];
+    int compras[MAX_CLIENTES];
+    int totalProdutos, totalClientes;
+    float totalVendas = 0.0;
 
-int main(int argc, char *argv[]) {
-    int i, p, npro, ncli;
-    int compra[CLIENTES];
-    float preco[PRODUTOS];
-    float total = 0.0;
+    // Garante aleatoriedade diferente a cada execução
+    srand(time(NULL));
 
-    // Iniciar o gerador de números aleatórios
-    srand((unsigned)time(NULL));
+    // Gera quantidade aleatória de produtos (entre 1 e 200)
+    totalProdutos = rand() % MAX_PRODUTOS + 1;
 
-    // Definir número de produtos (1 a 200)
-    npro = random(PRODUTOS) + 1;
-
-    // Gerar preços dos produtos (R$5 a R$100)
-    for (i = 0; i < npro; i++) {
-        p = 5 + random(96); // 96 = 100 - 5 + 1
-        preco[i] = p;
+    // Gera preços entre R$5,00 e R$100,00
+    for (int i = 0; i < totalProdutos; i++) {
+        produtos[i] = (rand() % 9601 + 500) / 100.0; // De 5.00 até 100.00
     }
 
-    // Definir número de clientes (1 a 50)
-    ncli = random(CLIENTES) + 1;
+    // Gera quantidade aleatória de clientes (entre 1 e 50)
+    totalClientes = rand() % MAX_CLIENTES + 1;
 
-    // Cada cliente compra 1 produto aleatório
-    for (i = 0; i < ncli; i++) {
-        compra[i] = random(npro);
-        total += preco[compra[i]];
+    // Cada cliente compra um produto aleatório
+    for (int i = 0; i < totalClientes; i++) {
+        compras[i] = rand() % totalProdutos;
     }
 
-    // Impressão formatada
-    printf("===============================================\n");
-    printf("            SIMULACAO DE VENDAS DA LOJA        \n");
-    printf("===============================================\n\n");
-
-    printf("Total de produtos disponíveis : %d\n\n", npro);
-    printf("----------- LISTA DE PRODUTOS -----------\n");
-    printf("| Código |    Preço (R$)    |\n");
-    printf("------------------------------------------\n");
-    for (i = 0; i < npro; i++) {
-        printf("| %6d |     %8.2f     |\n", i, preco[i]);
+    // Exibe os preços dos produtos
+    printf("Produtos disponíveis:\n");
+    for (int i = 0; i < totalProdutos; i++) {
+        printf("Produto %d: R$ %.2f\n", i, produtos[i]);
     }
-    printf("------------------------------------------\n\n");
 
-    printf("Total de clientes atendidos : %d\n\n", ncli);
-    printf("------ LISTA DE COMPRAS DOS CLIENTES ------\n");
-    printf("| Cliente | Produto Comprado | Valor (R$) |\n");
-    printf("-------------------------------------------\n");
-    for (i = 0; i < ncli; i++) {
-        printf("| %7d | %16d | %9.2f |\n", i, compra[i], preco[compra[i]]);
+    // Exibe o que cada cliente comprou
+    printf("\nCompras dos clientes:\n");
+    for (int i = 0; i < totalClientes; i++) {
+        int produtoComprado = compras[i];
+        float preco = produtos[produtoComprado];
+        totalVendas += preco;
+        printf("Cliente %d comprou Produto %d por R$ %.2f\n", i, produtoComprado, preco);
     }
-    printf("-------------------------------------------\n");
-    printf("TOTAL ARRECADADO NO DIA: R$ %.2f\n", total);
-    printf("===========================================\n");
+
+    // Total vendido
+    printf("\nTotal de vendas do dia: R$ %.2f\n", totalVendas);
 
     return 0;
 }
